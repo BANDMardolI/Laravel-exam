@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\News;
+use Illuminate\Support\Facades\Storage;
 
 class NewController extends Controller
 {
@@ -11,6 +12,23 @@ class NewController extends Controller
         $news = new News();
         return view('addnew',['page' => 'Add New', 'news' => $news] );
     }
+    
+    public function downloadNew($id){
+        $new = News::where('id', '=', $id)->get();
+        foreach ($new->all() as $instr){
+            $path = public_path().$instr->imagepath;
+        }
+        return response()->download($path, basename($path));
+    }
+    
+    public function showNew($id){
+        $new = News::where('id', '=', $id)->get();
+        foreach ($new->all() as $instr){
+            $path = public_path().$instr->imagepath;
+        }
+        return response()->file($path);
+    }
+
     public function store(Request $request){
         $validate = $request->validate([
             'header'=>'max:150',

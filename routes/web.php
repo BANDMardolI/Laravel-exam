@@ -3,7 +3,6 @@
 use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NewController;
-use App\Http\Controllers\PDFController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,13 +14,12 @@ use App\Http\Controllers\PDFController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::get('pdf/preview', [PDFController::class, 'preview'])->name('pdf.preview');
 Route::get('/', [NewController::class, 'index']);
 Route::get('addnew',[NewController::class, 'addNew'])->middleware('auth');
 Route::post('addnew',[NewController::class, 'store'])->middleware('auth');
-Route::get('view/{id}', [NewController::class, 'newView']);
-Route::get('show/{id}', [PDFController::class, 'generatePDF']);
+Route::get('show/{id}', [NewController::class, 'showNew']);
 Route::get('report/{id}', [NewController::class,    ]);
+Route::get('download/{id}', [NewController::class, 'downloadNew']);
 Route::get('login', [LoginController::class, 'login'])->name('login');
 Route::post('auth', [LoginController::class, 'authorizate']);
 Route::get('registration',[LoginController::class, 'registration']);

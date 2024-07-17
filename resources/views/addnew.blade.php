@@ -13,7 +13,7 @@
         </div>
         <div class="row">
             {!! Form::label('pdf', 'PDF file')!!}
-            {!! Form::file('pdf',['class'=>'filefield'])!!}
+            {!! Form::file('pdf',['class'=>'filefield'])!!} 
         </div>
         <button class="btn btn-success" type="submit">Add</button>
     </div>

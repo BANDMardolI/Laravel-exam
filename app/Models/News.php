@@ -10,5 +10,5 @@ class News extends Model
     use HasFactory;
     protected $primaryKey = 'id';
     protected $table = 'instructions';
-    protected $fillable = ['summary', 'short_description', 'full_text', 'created_at', 'updated_at', 'imagepath'];
+    protected $fillable = ['summary', 'created_at', 'updated_at', 'imagepath'];
 }
