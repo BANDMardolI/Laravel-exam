@@ -15,11 +15,12 @@ use App\Http\Controllers\NewController;
 |
 */
 Route::get('/', [NewController::class, 'index']);
-Route::get('addnew',[NewController::class, 'addNew'])->middleware('auth');
-Route::post('addnew',[NewController::class, 'store'])->middleware('auth');
-Route::get('show/{id}', [NewController::class, 'showNew']);
-Route::get('report/{id}', [NewController::class,    ]);
-Route::get('download/{id}', [NewController::class, 'downloadNew']);
+Route::post('/', [NewController::class, 'indexSearch']);
+Route::get('addinstr',[NewController::class, 'addInstr'])->middleware('auth');
+Route::post('addinstr',[NewController::class, 'store'])->middleware('auth');
+Route::get('show/{id}', [NewController::class, 'showInstr']);
+Route::get('report/{id}', [NewController::class, 'report']);
+Route::get('download/{id}', [NewController::class, 'downloadInstr']);
 Route::get('login', [LoginController::class, 'login'])->name('login');
 Route::post('auth', [LoginController::class, 'authorizate']);
 Route::get('registration',[LoginController::class, 'registration']);

@@ -6,7 +6,12 @@
 @section('content')
 <div class="container">
     <div class="row">
-        @foreach($news->all() as $n)
+    {!! Form::open(['action'=>'App\Http\Controllers\NewController@index', 'method' => 'post']) !!}
+        {!! Form::label('search') !!}
+        {!! Form::text('search') !!}
+        <button class="btn btn-success" type="submit">Search</button>
+    {!! Form::close() !!}
+        @foreach($instructions->all() as $n)
             <div class="row">
                 <h3 style="color: #337ab7;">{{$n->summary}}</h3>
                 <a href="{{url('download/'.$n->id)}}">

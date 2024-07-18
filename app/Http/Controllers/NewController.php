@@ -3,27 +3,27 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\News;
+use App\Models\Instructions;
 use Illuminate\Support\Facades\Storage;
 
 class NewController extends Controller
 {
-    public function addNew(){
-        $news = new News();
-        return view('addnew',['page' => 'Add New', 'news' => $news] );
+    public function addInstr(){
+        $instr = new Instructions();
+        return view('addinstr',['page' => 'Add Instructions', 'instructions' => $instr] );
     }
     
-    public function downloadNew($id){
-        $new = News::where('id', '=', $id)->get();
-        foreach ($new->all() as $instr){
+    public function downloadInstr($id){
+        $instructions = Instructions::where('id', '=', $id)->get();
+        foreach ($instructions->all() as $instr){
             $path = public_path().$instr->imagepath;
         }
         return response()->download($path, basename($path));
     }
     
-    public function showNew($id){
-        $new = News::where('id', '=', $id)->get();
-        foreach ($new->all() as $instr){
+    public function showInstr($id){
+        $instructions = Instructions::where('id', '=', $id)->get();
+        foreach ($instructions->all() as $instr){
             $path = public_path().$instr->imagepath;
         }
         return response()->file($path);
@@ -35,37 +35,37 @@ class NewController extends Controller
             'image' => 'pdf'
         ]);
 
-        $new = new News();
-        $new->summary = $request->header;
+        $instr = new Instructions();
+        $instr->summary = $request->header;
         if($request->hasFile('pdf')){
             $originalname = $request->file('pdf')->getClientOriginalName();
             $request->file('pdf')->move(public_path().'/instructions', $originalname);
-            $new->imagepath = '/instructions/'.$originalname;
+            $instr->imagepath = '/instructions/'.$originalname;
         }else{
-            $new->imagepath = '';
+            $instr->imagepath = '';
         }
 
 
-        if(!$new->save()){
-            $err = $new->getErrors();
-            return redirect()->action('App\Http\Controllers\NewController@addNew')->with('errors',$err)->withInputs();
-        }return redirect()->action('App\Http\Controllers\NewController@addNew')->with('message', 'Инструкция с id '.$new->id.' отправлена на модерацию!');
+        if(!$instr->save()){
+            $err = $instr->getErrors();
+            return redirect()->action('App\Http\Controllers\NewController@addInstr')->with('errors',$err)->withInputs();
+        }return redirect()->action('App\Http\Controllers\NewController@addInstr')->with('message', 'Инструкция с id '.$instr->id.' отправлена на модерацию!');
 
     }
+    
     public function index(){
-        $news = new News();
-
-        return view('index',['page'=>'Main page', 'news'=> $news]);
+        $instr = new Instructions();
+        return view('index',['page'=>'Main page', 'instructions'=> $instr]);
     }
 
-    public function newView($id){
+    public function indexSearch(Request $request){
+        $name = $request->search;
+        $instr = Instructions::where('summary', '=', $name)->get();
+        return view('index',['page'=>'Main page', 'instructions'=> $instr]);
+    }
 
-        $newView = News::where('id', '=', $id)->get();
-        foreach ($newView->all() as $view){
-            $title = $view->summary;
-        }
-
-        return view('view', ['page' => $title, 'view' => $newView]);
-
+    public function report($id){
+        $instr = Instructions::where('id', '=', $id)->get();
+        return view('report', ['page'=>'Main page', 'instructions' => $instr]);
     }
 }

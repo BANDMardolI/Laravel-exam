@@ -6,7 +6,7 @@
 @section('content')
 <div class="container">
     <div class="row">
-        {!! Form::model($news, ['action'=>'App\Http\Controllers\NewController@store', 'files'=>true])!!}
+        {!! Form::model($instructions, ['action'=>'App\Http\Controllers\NewController@store', 'files'=>true])!!}
         <div class="row">
             {!! Form::label('header','Header')!!}
             {!! Form::text('header', '',['class' => 'textfield'])!!}

@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('news', function (Blueprint $table) {
+        Schema::table('instructions', function (Blueprint $table) {
             $table->string('imagepath', 256)->nullable();
         });
     }
