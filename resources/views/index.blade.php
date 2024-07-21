@@ -12,16 +12,16 @@
         <button class="btn btn-success" type="submit">Search</button>
     {!! Form::close() !!}
         @foreach($instructions->all() as $n)
-            <div class="row">
+            <div class="row d-flex border-bot">
                 <h3 style="color: #337ab7;">{{$n->summary}}</h3>
-                <a href="{{url('download/'.$n->id)}}">
-                    <i class='fa fa-download' style='color:#337ab7'></i>
+                <a class="ml" href="{{url('download/'.$n->id)}}">
+                    <i class='fa fa-download fs-10' style='color:#337ab7'></i>
                 </a>
                 <a href="{{url('show/'.$n->id)}}" class="">
-                    <i class='fa fa-eye' style='color:#337ab7'></i>
+                    <i class='fa fa-eye fs-10' style='color:#337ab7'></i>
                 </a>
                 <a href="{{url('report/'.$n->id)}}">
-                    <i class='fa fa-exclamation' style='color: #337ab7'></i>
+                    <i class='fa fa-exclamation fs-10' style='color: #337ab7'></i>
                 </a>
             </div>
         @endforeach

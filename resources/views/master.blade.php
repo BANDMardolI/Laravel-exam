@@ -17,7 +17,26 @@
             .form-group{
                 padding: 15px;
             }
-
+            .d-flex{
+                display: flex;
+                align-items: center;
+                gap: 20px;
+            }
+            .align-items{
+                align-items: start;
+            }
+            .main-color{
+                color: #337ab7;
+            }
+            .fs-10{
+                font-size: 20px;
+            }
+            .border-bot{
+                border-bottom: 2px solid #337ab7;
+            }
+            .ml{
+                margin-left: 20px;
+            }
         </style>
     </head><!-- /head -->
     <body>

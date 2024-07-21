@@ -21,6 +21,7 @@ Route::post('addinstr',[NewController::class, 'store'])->middleware('auth');
 Route::get('show/{id}', [NewController::class, 'showInstr']);
 Route::get('report/{id}', [NewController::class, 'report']);
 Route::get('download/{id}', [NewController::class, 'downloadInstr']);
+Route::post('sendreport',[NewController::class, 'sendReport']);
 Route::get('login', [LoginController::class, 'login'])->name('login');
 Route::post('auth', [LoginController::class, 'authorizate']);
 Route::get('registration',[LoginController::class, 'registration']);
