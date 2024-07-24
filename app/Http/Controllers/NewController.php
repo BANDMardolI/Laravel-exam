@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Instructions;
+use App\Models\UsersInstructions;
 use App\Models\Complaints;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class NewController extends Controller
 {
     public function addInstr(){
-        $instr = new Instructions();
+        $instr = new UsersInstructions();
         return view('addinstr',['page' => 'Add Instructions', 'instructions' => $instr] );
     }
     
@@ -36,7 +37,7 @@ class NewController extends Controller
             'image' => 'pdf'
         ]);
 
-        $instr = new Instructions();
+        $instr = new UsersInstructions();
         $instr->summary = $request->header;
         if($request->hasFile('pdf')){
             $originalname = $request->file('pdf')->getClientOriginalName();
@@ -55,8 +56,14 @@ class NewController extends Controller
     }
     
     public function index(){
-        $instr = new Instructions();
-        return view('index',['page'=>'Main page', 'instructions'=> $instr]);
+        if(Auth::check() && Auth::user()->name == 'admin'){
+            $instr = new Instructions();
+            $reportedInstr = new Complaints();
+            return view('index',['page'=>'Instruction page', 'instructions'=> $instr, 'reportedInstructions' => $reportedInstr]);
+        } else {
+            $instr = new Instructions();
+            return view('index',['page'=>'Main page', 'instructions'=> $instr]);
+        }
     }
 
     public function indexSearch(Request $request){
@@ -79,5 +86,55 @@ class NewController extends Controller
             $err = $compl->getErrors();
             return redirect()->action('App\Http\Controllers\NewController@index')->with('errors',$err)->withInputs();
         }return redirect()->action('App\Http\Controllers\NewController@index')->with('message', 'Жалоба на инструкцию с id '.$compl->id.' отправлена!');
+    }
+
+    public function delinstr($id){
+        Instructions::where('id', '=', $id)->delete();
+        return redirect()->action('App\Http\Controllers\NewController@index');
+    }
+
+    public function cancelinstr($id){
+        UsersInstructions::where('id', '=', $id)->delete();
+        return redirect()->action('App\Http\Controllers\NewController@usersinstr');
+    }
+
+    public function apprinstr($id){
+        $userInstr = UsersInstructions::where('id', '=', $id)
+            ->each(function($old){
+                $new = $old->replicate();
+                $new->setTable('instructions');
+                $new->save();
+                $old->delete();
+            });
+        return redirect()->action('App\Http\Controllers\NewController@usersinstr');
+    }
+
+    public function usersinstr(){
+        $instr = new UsersInstructions();
+        return view('usersinstr', ['page' => 'User`s Instructions', 'instructions' => $instr]);
+    }
+
+    public function adminstore(Request $request){
+        $validate = $request->validate([
+            'header'=>'max:150',
+            'image' => 'pdf'
+        ]);
+
+        $instr = new Instructions();
+        $instr->summary = $request->header;
+        if($request->hasFile('pdf')){
+            $originalname = $request->file('pdf')->getClientOriginalName();
+            $request->file('pdf')->move(public_path().'/instructions', $originalname);
+            $instr->imagepath = '/instructions/'.$originalname;
+        }else{
+            $instr->imagepath = '';
+        }
+
+
+        if(!$instr->save()){
+            $err = $instr->getErrors();
+            return redirect()->action('App\Http\Controllers\NewController@index')->with('errors',$err)->withInputs();
+        }return redirect()->action('App\Http\Controllers\NewController@index')->with('message', 'Инструкция с id '.$instr->id.' добавлена!');
+
     }
 }

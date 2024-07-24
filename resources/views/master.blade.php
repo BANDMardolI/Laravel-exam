@@ -37,10 +37,27 @@
             .ml{
                 margin-left: 20px;
             }
+            .mt-40{
+                margin-top: 80px;
+            }
         </style>
     </head><!-- /head -->
     <body>
     @section('menu')
+    @if(Auth::check() && Auth::user()->name == 'admin')
+    <div class="adminmenu1 col-sm-12 col-md-12 col-lg-12">
+    <ul class="nav nav-pills nav-justified">
+        <li role="presentation" {{$page =='Instruction page' ? 'class=active' : ''}}>
+            <a href="{{url('/')}}">Instructions</a></li>
+        <li role="presentation" {{$page == 'User`s Instructions' ? 'class=active' : ''}}>
+            <a href="{{url('usersinstr')}}">User`s instructions</a></li>
+        <li role="presentation" {{$page == 'Users page' ? 'class=active' : ''}}>
+            <a href="{{url('users')}}">Users</a></li>
+        <li role="presentation"  class="active">
+            <a href="{{url('logout')}}">Logout</a></li>
+    </ul>
+    </div>   
+    @else  
     <div class="mainmenu1 col-sm-12 col-md-12 col-lg-12">
         <ul class="nav nav-pills nav-justified">
         <li role="presentation" {{$page =='Main page' ? 'class=active' : ''}}>
@@ -64,6 +81,7 @@
             </ul>
         @endif
     </div>
+    @endif
     @show
     <div class="container col-sm-12 col-md-12 col-lg-12">
         @if ($errors->any())
