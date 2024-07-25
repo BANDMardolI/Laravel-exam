@@ -8,6 +8,8 @@
     <div class="row">
         @if($page == 'Login')
             {!! Form::model($user, ['action'=>'App\Http\Controllers\LoginController@authorizate'])!!}
+            <div class="g-recaptcha" data-sitekey="{{ env('RECAPTCHA_SITE_KEY') }}"></div>
+            <script src="https://www.google.com/recaptcha/api.js"></script>
         @elseif($page == 'Registration')
             {!! Form::model($user, ['action'=>'App\Http\Controllers\LoginController@register'])!!}
             <div class="g-recaptcha" data-sitekey="{{ env('RECAPTCHA_SITE_KEY') }}"></div>

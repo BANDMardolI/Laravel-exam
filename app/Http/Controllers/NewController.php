@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Instructions;
 use App\Models\UsersInstructions;
 use App\Models\Complaints;
+use App\Models\User;
+use App\Models\BannedUsers;
 use Illuminate\Support\Facades\Auth;
 
 class NewController extends Controller
@@ -136,5 +138,38 @@ class NewController extends Controller
             return redirect()->action('App\Http\Controllers\NewController@index')->with('errors',$err)->withInputs();
         }return redirect()->action('App\Http\Controllers\NewController@index')->with('message', 'Инструкция с id '.$instr->id.' добавлена!');
 
+    }
+
+    public function users(){
+        $users = new User();
+        $bannedUsers = new BannedUsers();
+        return view('users',['page'=>'Users page', 'users'=> $users, 'bannedUsers' => $bannedUsers]);
+    }
+
+    public function deleteuser($id){
+        User::where('id', '=', $id)->delete();
+        return redirect()->action('App\Http\Controllers\NewController@users');
+    }
+
+    public function ban($id){
+        $users = User::where('id', '=', $id)
+            ->each(function($old){
+                $new = $old->replicate();
+                $new->setTable('banned_users');
+                $new->save();
+                $old->delete();
+            });
+        return redirect()->action('App\Http\Controllers\NewController@users');
+    }
+
+    public function unban($id){
+        $bannedUser = BannedUsers::where('id', '=', $id)
+            ->each(function($old){
+                $new = $old->replicate();
+                $new->setTable('users');
+                $new->save();
+                $old->delete();
+            });
+        return redirect()->action('App\Http\Controllers\NewController@users');
     }
 }

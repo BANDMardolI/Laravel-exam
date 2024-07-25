@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:8888
--- Время создания: Июл 24 2024 г., 21:55
+-- Время создания: Июл 25 2024 г., 20:00
 -- Версия сервера: 8.0.30
 -- Версия PHP: 8.1.9
 
@@ -20,6 +20,23 @@ SET time_zone = "+00:00";
 --
 -- База данных: `exam`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `banned_users`
+--
+
+CREATE TABLE `banned_users` (
+  `id` bigint UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email_verified_at` timestamp NULL DEFAULT NULL,
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -107,7 +124,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (5, '2024_06_17_143545_create_news', 1),
 (6, '2024_06_19_154857_update_table', 1),
 (7, '2024_07_19_142734_create_complaints_table', 2),
-(8, '2024_07_24_162621_create_users_instructions_table', 3);
+(8, '2024_07_24_162621_create_users_instructions_table', 3),
+(9, '2024_07_25_163724_create_banned_users_table', 4);
 
 -- --------------------------------------------------------
 
@@ -162,9 +180,10 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'artur', 'artur.akhmadishin@mail.ru', NULL, '$2y$12$LkcJm/l98Kx8yr2k4Sp1LeQkeA4KDGm/p46ypNqSP862XVHM7r9PW', NULL, '2024-07-17 12:53:20', '2024-07-17 12:53:20'),
-(2, 'bbb', 'yhiiauco@dfirstmail.com', NULL, '$2y$12$vAa9Gld29YhEhPI3ISJ3euv4EmBNmDG8bMlFiOYZJPDh2rmWJViSO', NULL, '2024-07-18 15:04:48', '2024-07-18 15:04:48'),
-(3, 'admin', 'admin@admin', NULL, '$2y$12$0v3MMp3PzX/6u/mvhIUhR.mta2FJJmHlIszSDi5dwmZLsoxQn1pWi', NULL, '2024-07-22 17:29:44', '2024-07-22 17:29:44');
+(5, 'admin', 'admin@admin', NULL, '$2y$12$0v3MMp3PzX/6u/mvhIUhR.mta2FJJmHlIszSDi5dwmZLsoxQn1pWi', NULL, '2024-07-25 13:43:33', '2024-07-25 13:43:33'),
+(8, 'arara', 'arara@gmail.com', NULL, '$2y$12$rBZQxQE9By5htaxmlYdJr.OQLL4nl7NbkddsLLkw2Ap7bsS7NZ9HG', NULL, '2024-07-25 13:52:37', '2024-07-25 13:52:37'),
+(11, 'tzgocpa', 'shklyayev.kirya@bk.ru', NULL, '$2y$12$LerkXCF9JLZJWRrl1/eJH.3dDHMbjdM429DdhRYN8PaW4S862DnwO', NULL, '2024-07-25 13:58:54', '2024-07-25 13:58:54'),
+(12, 'artur', 'artur.akhmadishin@mail.ru', NULL, '$2y$12$zUdm599ZB1/RhKneFTcmk.raf72dAJF0rv0MJuPgI9yz6r.PM8VXu', NULL, '2024-07-25 13:59:57', '2024-07-25 13:59:57');
 
 -- --------------------------------------------------------
 
@@ -190,6 +209,13 @@ INSERT INTO `users_instructions` (`id`, `summary`, `created_at`, `updated_at`, `
 --
 -- Индексы сохранённых таблиц
 --
+
+--
+-- Индексы таблицы `banned_users`
+--
+ALTER TABLE `banned_users`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `banned_users_email_unique` (`email`);
 
 --
 -- Индексы таблицы `complaints`
@@ -251,6 +277,12 @@ ALTER TABLE `users_instructions`
 --
 
 --
+-- AUTO_INCREMENT для таблицы `banned_users`
+--
+ALTER TABLE `banned_users`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT для таблицы `complaints`
 --
 ALTER TABLE `complaints`
@@ -272,7 +304,7 @@ ALTER TABLE `instructions`
 -- AUTO_INCREMENT для таблицы `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT для таблицы `personal_access_tokens`
@@ -284,7 +316,7 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT для таблицы `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT для таблицы `users_instructions`

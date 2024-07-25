@@ -32,12 +32,14 @@ class LoginController extends Controller
 
     }
     public function register(Request $request){
-        $recaptcha = new ReCaptcha(env('RECAPTCHA_SECRET_KEY'));
-        $response = $recaptcha->verify($request->input('g-recaptcha-response'), env('APP_URL'));
+        if(!(Auth::check() && Auth::user()->name == 'admin')){
+            $recaptcha = new ReCaptcha(env('RECAPTCHA_SECRET_KEY'));
+            $response = $recaptcha->verify($request->input('g-recaptcha-response'), env('APP_URL'));
 
-        if (!$response->isSuccess()) {
-                //Капча не пройдена
-            return redirect()->back()->withErrors(['g-recaptcha-response' => 'Пожалуйста, подтвердите, что вы человек.'])->withInput();
+            if (!$response->isSuccess()) {
+                    //Капча не пройдена
+                return redirect()->back()->withErrors(['g-recaptcha-response' => 'Пожалуйста, подтвердите, что вы человек.'])->withInput();
+            }
         }
         $user = new User();
         $user->name = $request->login;
@@ -45,8 +47,12 @@ class LoginController extends Controller
         $user->email = $request->email;
         if(!$user->save()){
             return back()->withErrors(['email'=>'Email in use'])->onlyInput('email');
+        } else {
+            if(Auth::check() && Auth::user()->name == 'admin'){
+                return redirect()->action('App\Http\Controllers\NewController@users')->with('message', 'Registration complete!');
+            } else{
+                return redirect()->action('App\Http\Controllers\LoginController@login')->with('message', 'Registration complete!');
+            }
         }
-            return redirect()->action('App\Http\Controllers\LoginController@login')->with('message', 'Registration complete!')
-        ;
     }
 }
